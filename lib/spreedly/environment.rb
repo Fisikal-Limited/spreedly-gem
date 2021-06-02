@@ -307,7 +307,7 @@ module Spreedly
       add_shipping_address_override(doc, options)
       add_to_doc(doc, options, :order_id, :description, :ip, :email, :merchant_name_descriptor,
                                :merchant_location_descriptor, :redirect_url, :callback_url,
-                               :continue_caching, :attempt_3dsecure, :browser_info, :three_ds_version, :channel)
+                               :continue_caching, :attempt_3dsecure, :browser_info, :three_ds_version, :channel, :sca_provider_key)
     end
 
     def add_gateway_specific_fields(doc, options)
