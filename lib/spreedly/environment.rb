@@ -297,7 +297,8 @@ module Spreedly
 
     def add_to_doc(doc, options, *attributes)
       attributes.each do |attr|
-        doc.send(attr, options[attr.to_sym]) if options[attr.to_sym] != nil
+        doc.send(attr, options[attr.to_sym]) if options[attr.to_sym] != nil && !options[attr.to_sym].kind_of?(Hash)
+        doc << xml_for_hash(attr.to_sym => options[attr.to_sym]) if options[attr.to_sym].kind_of?(Hash)
       end
     end
 
@@ -306,6 +307,7 @@ module Spreedly
       add_shipping_address_override(doc, options)
       add_to_doc(doc, options, :order_id, :description, :ip, :email, :merchant_name_descriptor,
                                :merchant_location_descriptor, :redirect_url, :callback_url,
+                               :sca_authentication_parameters,
                                :continue_caching, :attempt_3dsecure, :browser_info, :three_ds_version, :channel, :sca_provider_key)
     end
 
