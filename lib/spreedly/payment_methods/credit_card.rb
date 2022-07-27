@@ -5,6 +5,7 @@ module Spreedly
     field :number, :last_four_digits, :first_six_digits, :card_type, :verification_value
     field :address1, :address2, :city, :state, :zip, :country, :phone_number, :company, :fingerprint
     field :eligible_for_card_updater, type: :boolean
+    field :issuer_identification_number
   end
 
 end
