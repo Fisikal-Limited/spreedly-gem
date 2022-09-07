@@ -44,6 +44,11 @@ module Spreedly
       api_post(purchase_url(gateway_token), body)
     end
 
+    def apple_pay_purchase_on_gateway(gateway_token, options = {})
+      body = auth_purchase_via_apple_pay_body(options)
+      api_post(purchase_url(gateway_token), body)
+    end
+
     def authorize_on_gateway(gateway_token, payment_method_token, amount, options = {})
       body = auth_purchase_body(amount, payment_method_token, options)
       api_post(authorize_url(gateway_token), body)
@@ -169,6 +174,25 @@ module Spreedly
         'Content-Type' => 'text/xml',
         'User-Agent' => "spreedly-gem/#{Spreedly::VERSION}"
       }
+    end
+
+    def auth_purchase_via_apple_pay_body(options)
+      build_xml_request('transaction') do |doc|
+        add_apple_pay_specific_fields(doc, options)
+      end
+    end
+
+    def add_apple_pay_specific_fields(doc, options)
+      return unless options[:apple_pay].kind_of?(Hash)
+
+      test_mode = options.dig(:apple_pay, :test_mode) ? "<test_card_number>4111111111111111</test_card_number>" : ''
+      payment_data = element_to_cdata(options.dig(:apple_pay, :payment_data))
+      doc << "<apple_pay><payment_data>#{payment_data}</payment_data>#{test_mode}</apple_pay>"
+    end
+
+    def element_to_cdata(element)
+      tmp = Nokogiri::XML::Document.new
+      tmp.create_cdata(element).to_xml
     end
 
     def auth_purchase_body(amount, payment_method_token, options)
