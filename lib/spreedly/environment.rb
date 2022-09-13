@@ -178,6 +178,9 @@ module Spreedly
 
     def auth_purchase_via_apple_pay_body(options)
       build_xml_request('transaction') do |doc|
+        add_to_doc(doc, options, :retain_on_success)
+        add_to_doc(doc, options, :stored_credential_initiator)
+        add_to_doc(doc, options, :stored_credential_reason_type)
         add_apple_pay_specific_fields(doc, options)
       end
     end
