@@ -311,9 +311,10 @@ module Spreedly
                                :continue_caching, :attempt_3dsecure, :browser_info, :three_ds_version, :channel, :sca_provider_key)
     end
 
-    def add_gateway_specific_fields(doc, options)
-      return unless options[:gateway_specific_fields].kind_of?(Hash)
-      doc << "<gateway_specific_fields>#{xml_for_hash(options[:gateway_specific_fields])}</gateway_specific_fields>"
+    def add_gateway_specific_fields(doc, gateway_specific_fields: nil, **opts)
+      return unless gateway_specific_fields.kind_of?(Hash)
+
+      doc << gateway_specific_fields.to_xml(root: :gateway_specific_fields, skip_instruct: true, dasherize: false, indent: 0)
     end
 
     def add_shipping_address_override(doc, options)
